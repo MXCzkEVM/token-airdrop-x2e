@@ -16,7 +16,7 @@ export const sumBigNumbers = (numbers: BigNumber[]): BigNumber => {
 }
 
 export const AIRDROP_CONTRACT_ADDRESS = ethers.utils.getAddress(
-  `0x6090Fa5612A95309342DacE03854EC05b5F04912`,
+  `0x31c7eD1b097730f7BC363059EB71526b6CB514E3`,
 )
 
 export const TOKEN_CONTRACT_ADDRESS = ethers.utils.getAddress(
