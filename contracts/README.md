@@ -1,8 +1,8 @@
 # Magna Take-Home Base Contracts
 
 ```
-ERC20Factory address: 0x78d430d14Fa12c412C7Bf993416E6CE3EdC5E8f9
-Airdrop address: 0x50Af2311F45317473C804447B72B52233aa32A73
+ERC20Factory address: 0x2b8546F1E9B59eF499Acb6969D8B455DeAC6CE1B
+Airdrop address: 0x31c7eD1b097730f7BC363059EB71526b6CB514E3
 ```
 
 ## Smart Contracts:
