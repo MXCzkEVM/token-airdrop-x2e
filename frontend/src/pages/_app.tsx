@@ -55,7 +55,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <WagmiConfig client={client}>
           <RainbowKitProvider chains={chains}>
             <NextHead>
-              <title>MagnaDrop</title>
+              <title>MXC zkEVM ERC20</title>
             </NextHead>
             {isConnected ? (
               <>{mounted && getLayout(<Component {...pageProps} />)}</>

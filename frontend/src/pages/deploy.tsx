@@ -8,7 +8,7 @@ import DeployTokenForm from '@components/forms/DeployTokenForm'
 const Page: NextPageWithLayout = () => {
   return (
     <>
-      <div className="mx-auto w-3/5">
+      <div className="mx-auto w-full">
         <Card>
           <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Deploy an ERC20 Token

@@ -28,9 +28,20 @@ const Page: NextPageWithLayout = () => {
     args: [ethers.utils.getAddress(address || `0x`)],
   })
 
+const copyToClipboard = (text) => {
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      console.log('Text copied to clipboard');
+    })
+    .catch(err => {
+      console.error('Error in copying text: ', err);
+    });
+};
+
+
   return (
     <>
-      <div className="mx-auto w-3/5 text-center">
+      <div className="mx-auto w-full text-center">
         <Card>
           <h5 className="text-2xl mb-4 font-bold tracking-tight text-gray-900 dark:text-white">
             Your Tokens:
@@ -47,12 +58,12 @@ const Page: NextPageWithLayout = () => {
                   >
                     <circle cx="12" cy="12" r="11" />
                     <path
-                      d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
+                      d="m7 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
                       fill="none"
                     />
                   </svg>
                   <p className="ml-4">
-                    <code className="text-sm font-bold text-gray-900">
+                    <code className="text-xs font-bold text-gray-900">
                       {token}
                     </code>
                   </p>

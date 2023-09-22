@@ -8,7 +8,7 @@ import AirdropForm from '@components/forms/AirdropForm'
 const Page: NextPageWithLayout = () => {
   return (
     <>
-      <div className="mx-auto w-3/5">
+      <div className="mx-auto w-full">
         <Card>
           <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Airdrop

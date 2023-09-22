@@ -11,7 +11,7 @@ const LayoutNavbar: React.FC = () => {
       <Navbar fluid={true} rounded={true}>
         <Navbar.Brand href="https://flowbite.com/">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            MagnaDrop
+            MXC zkEVM
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">

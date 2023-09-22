@@ -7,7 +7,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <div className="mx-auto w-3/5">
-        <Card>MagnaDrop</Card>
+        <Card>Create an ERC20 token on zkEVM</Card>
       </div>
     </>
   )
