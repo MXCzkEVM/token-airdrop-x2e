@@ -67,7 +67,7 @@ const DeployTokenForm = (): React.ReactElement<any, any> => {
             <TextInput
               id="tokenName"
               type="string"
-              placeholder="FTX Token"
+              placeholder="tMXC Token"
               required={true}
               {...register(`tokenName`, { required: true })}
             />
@@ -78,7 +78,7 @@ const DeployTokenForm = (): React.ReactElement<any, any> => {
             </div>
             <TextInput
               id="tokenSymbol"
-              placeholder="FTT"
+              placeholder="tMXC"
               type="string"
               required={true}
               {...register(`tokenSymbol`, { required: true })}

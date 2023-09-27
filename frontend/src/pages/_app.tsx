@@ -9,6 +9,9 @@ import React from 'react'
 import { useAccount, WagmiConfig } from 'wagmi'
 import { chains, client } from '@utils/wagmi'
 import { Inter } from '@next/font/google'
+import logo from './favicon-new.png';
+import { ReactComponent as logo2 } from './mxc_logo.svg';
+//const logo = require('./favicon-new.png');
 const inter = Inter()
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -25,7 +28,7 @@ const PleaseConnectWallet = (): React.ReactElement => {
     <div className="bg-white py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="sm:text-center">
-          <h2 className="text-lg font-semibold leading-8 text-indigo-600">
+          <h2 className="text-2xl font-semibold leading-8 text-sky-800">
             Please connect your wallet
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -36,6 +39,19 @@ const PleaseConnectWallet = (): React.ReactElement => {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+// Show logo helper
+const ShowLogo = (): React.ReactElement => {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>X-to-Earn DApp Hello World</h1>
+         <img src= {logo} className="App-logo" alt="MXC" /> 
+        {/* <img alt='logo' style={{ width: 100 }} src={String(logo)} className="App-logo"/> */}
+      </header>
     </div>
   )
 }
@@ -57,6 +73,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <NextHead>
               <title>MXC zkEVM ERC20</title>
             </NextHead>
+            <ShowLogo />
             {isConnected ? (
               <>{mounted && getLayout(<Component {...pageProps} />)}</>
             ) : (

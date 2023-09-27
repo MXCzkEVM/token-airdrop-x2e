@@ -19,6 +19,7 @@
     "eslint-import-resolver-typescript": "^3.5.2",
     "eslint-plugin-prettier": "^4.2.1",
     "ethers": "^5.7.2",
+    "file-loader": "^6.2.0",
     "flowbite": "^1.6.0",
     "flowbite-react": "^0.3.7",
     "next": "^13.0.0",

@@ -9,7 +9,7 @@ const LayoutNavbar: React.FC = () => {
   return (
     <div className="mb-8">
       <Navbar fluid={true} rounded={true}>
-        <Navbar.Brand href="https://flowbite.com/">
+        <Navbar.Brand href="https://mxc.org">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             MXC zkEVM
           </span>
@@ -28,6 +28,9 @@ const LayoutNavbar: React.FC = () => {
           </Navbar.Link>
           <Navbar.Link onClick={() => router.push(`/airdrop`)}>
             Airdrop
+          </Navbar.Link>
+          <Navbar.Link onClick={() => router.push(`/sensor`)}>
+            Sensor Data
           </Navbar.Link>
         </Navbar.Collapse>
       </Navbar>
