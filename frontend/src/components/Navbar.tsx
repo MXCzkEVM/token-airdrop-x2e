@@ -6,6 +6,10 @@ import { useRouter } from 'next/router'
 const LayoutNavbar: React.FC = () => {
   const router = useRouter()
 
+  const linkStyle = {
+    cursor: 'pointer', // Change cursor to a hand (pointer) when hovering
+  };
+
   return (
     <div className="mb-8">
       <Navbar fluid={true} rounded={true}>
@@ -19,19 +23,11 @@ const LayoutNavbar: React.FC = () => {
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link onClick={() => router.push(`/`)}>Home</Navbar.Link>
-          <Navbar.Link onClick={() => router.push(`/deploy`)}>
-            Deploy Token
-          </Navbar.Link>
-          <Navbar.Link onClick={() => router.push(`/tokens`)}>
-            My Tokens
-          </Navbar.Link>
-          <Navbar.Link onClick={() => router.push(`/airdrop`)}>
-            Airdrop
-          </Navbar.Link>
-          <Navbar.Link onClick={() => router.push(`/sensor`)}>
-            Sensor Data
-          </Navbar.Link>
+          <Navbar.Link onClick={() => router.push(`/`)} style={linkStyle}>Home</Navbar.Link>
+          <Navbar.Link onClick={() => router.push(`/deploy`)}style={linkStyle}>Deploy Token</Navbar.Link>
+          <Navbar.Link onClick={() => router.push(`/tokens`)}style={linkStyle}>My Tokens</Navbar.Link>
+          <Navbar.Link onClick={() => router.push(`/airdrop`)}style={linkStyle}>Airdrop </Navbar.Link>
+          <Navbar.Link onClick={() => router.push(`/sensor`)}style={linkStyle}>Sensor Data</Navbar.Link>
         </Navbar.Collapse>
       </Navbar>
     </div>

@@ -63,7 +63,7 @@ const copyToClipboard = (text) => {
 
   return (
     <>
-      <div className="mx-auto w-full text-center">
+      <div className="mx-auto w-3/5">
         <Card>
           <h5 className="text-2xl mb-4 font-bold tracking-tight text-sky-800 dark:text-white">
             Your Tokens
@@ -72,8 +72,8 @@ const copyToClipboard = (text) => {
           {!isLoading && data && (
             <ul className="space-y-4 list-outside">
               {data.map((token: `0x${string}`, index: number) => (
-                <li key={index} className="flex items-center text-center list-outside">
-                    <div className="mx-auto w-full text-center">
+                <li key={index} className="flex items-center list-outside">
+                    <div className="mx-auto w-full">
                     <p className="text-1xl font-semibold leading-8 text-sky-800"> Token Contract Address: </p>
                         {token}
                         {GetTokenInfo({token})}
