@@ -62,27 +62,31 @@ const Page: NextPageWithLayout = () => {
 
   const GetBlockNumberFunc = (): React.ReactElement => {
     const publicClient = useProvider();
-    publicClient.on('block', (blockNumber) => {
-        setCurrentBlock(blockNumber);
-        let block = publicClient.getBlockWithTransactions(blockNumber);
-        block.then(function(x)
-            {
-                console.log(blockNumber)
-                for (let tx of x.transactions) {
-                    if (tx.from && tx.from.toLowerCase() === '0x452403368683016c54dd16871622648f37aa946c') {
-                        console.log("Transaction Found:", tx);
-                        //parseTransaction(tx);
-                        let utf8Str = bytesToUtf8(hexToBytes(tx.data));
-                        //console.log(jsonString);
-                        let jsonObj = JSON.parse(extractJSON(utf8Str));		
-                        console.log(jsonObj);
-                        setDeviceName(jsonObj.deviceInfo.deviceName);
-                        setDeviceEui(jsonObj.deviceInfo.devEui);
-                        setDeviceData(jsonObj.data);
-                        console.log(deviceName);
-                    }}
-            })
-    });
+    if(publicClient.listenerCount('block') < 1){
+        publicClient.on('block', (blockNumber) => {      
+            setCurrentBlock(blockNumber);
+            console.log(blockNumber)
+            let block = publicClient.getBlockWithTransactions(blockNumber);
+            block.then(function(x)
+                {
+                    
+                    for (let tx of x.transactions) {
+                        if (tx.from && tx.from.toLowerCase() === '0x452403368683016c54dd16871622648f37aa946c') {
+                            console.log("Transaction Found:", tx);
+                            //parseTransaction(tx);
+                            let utf8Str = bytesToUtf8(hexToBytes(tx.data));
+                            //console.log(jsonString);
+                            let jsonObj = JSON.parse(extractJSON(utf8Str));		
+                            console.log(jsonObj);
+                            setDeviceName(jsonObj.deviceInfo.deviceName);
+                            setDeviceEui(jsonObj.deviceInfo.devEui);
+                            setDeviceData(jsonObj.data);
+                            console.log(jsonObj.deviceInfo.deviceName);
+                        }
+                    }
+                })        
+            });
+    }
     //console.log("get Block");
     //console.log(block);
     return (<div>{deviceName}</div>);
