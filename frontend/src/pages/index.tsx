@@ -2,6 +2,8 @@ import { Card } from 'flowbite-react'
 import { NextPageWithLayout } from './_app'
 import Layout from '@components/Layout'
 import { ReactElement } from 'react'
+import dotenv from 'dotenv';
+import React from 'react';
 
 import {
   useAccount,
@@ -12,7 +14,8 @@ import {
 } from 'wagmi'
 import { useBalance } from 'wagmi'
 
-
+// Load environment variables from .env file
+//dotenv.config();
 
 const GetBalance = (myaddress: string): React.ReactElement => {
   const { data, isError, isLoading } = useBalance({
@@ -26,14 +29,13 @@ const GetBalance = (myaddress: string): React.ReactElement => {
     </div>
   )
 }
-
-export function Profile() {
+function Profile() {
   const { address, connector, isConnected } = useAccount()
   //const { data: ensAvatar } = useEnsAvatar({ address })
   const { data: ensName } = useEnsName({ address })
   const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
   const { disconnect } = useDisconnect()
-  
+  dotenv.config();
   const myBalance = GetBalance({address});
 
   if (isConnected) {

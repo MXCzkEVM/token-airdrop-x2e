@@ -28,11 +28,3 @@ export function hexToBytes(hex: string): number[] {
     return null;
   }
   
-  // Export the functions as an object
-  const jsonParser = {
-    hexToBytes,
-    bytesToUtf8,
-    extractJSON,
-  };
-  
-  export default jsonParser;
