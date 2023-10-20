@@ -8,7 +8,10 @@ import { useAccount, useContractRead, useProvider, useToken, useTransaction, use
 import { watchBlockNumber } from '@wagmi/core'
 import { ethers, utils } from 'ethers'
 import React, { useEffect } from 'react'
-import {hexToBytes, bytesToUtf8, extractJSON} from '@utils/jsonparser'
+import {hexToBytes, bytesToUtf8, extractJSON, stringToHex} from '@utils/jsonparser'
+import { prepareSendTransaction, sendTransaction } from '@wagmi/core'
+import { usePrepareSendTransaction, useSendTransaction } from 'wagmi'
+
 //import {MintTokens} from '@utils/mintTokenEthers'
 
 // type tokenInfo = {
@@ -35,6 +38,7 @@ const Page: NextPageWithLayout = () => {
 
   const [deviceName, setDeviceName] = React.useState("No Data");
   const [deviceEui, setDeviceEui] = React.useState("No Data");
+  const [appID, setAppID] = React.useState("");
   const [deviceData, setDeviceData] = React.useState("No Data");
   const [currentBlock, setCurrentBlock] = React.useState("No Data");
   const [myTokenBalance, setMyTokenBalance] = React.useState("No Data");
@@ -43,6 +47,7 @@ const Page: NextPageWithLayout = () => {
   //const [transactionHash, setTransactionHash] = React.useState(null);
 
   let myTokenAddress = "";
+  let myWalletAddress = "";
   let myTokenSymbol = "";
 
   const { address } = useAccount()
@@ -118,15 +123,16 @@ const Page: NextPageWithLayout = () => {
                     console.log(jsonObj);
                     setDeviceName(jsonObj.deviceInfo.deviceName);
                     setDeviceEui(jsonObj.deviceInfo.devEui);
+                    setAppID(jsonObj.deviceInfo.applicationId);
                     //getReward(); 
                     if(jsonObj.hasOwnProperty("object") && jsonObj.object.hasOwnProperty("x2earn_data")){ //jsonObj.object.x2earn_data.distance0   && jsonObj.object.hasOwnProperty("x2earn_data")
                       setDeviceData(jsonObj.object.x2earn_data.distance0);
                       console.log(jsonObj.object.x2earn_data.distance0);
                       getReward(); 
 
-                      //let balance = UpdateBalance();
-                      UpdateBalance();
-                      console.log(balance);
+                    //let balance = UpdateBalance();
+                    //UpdateBalance();
+                    // console.log(balance);
                       //if(balance){setMyTokenBalance(balance);}
                       //setMyTokenBalance(balance);
                     }
@@ -159,9 +165,9 @@ const getReward = () => {
 // }
 
 const UpdateBalance = async () => {
-  const { address } = useAccount();
+  //const { address } = useAccount();
   const { data, isError, isLoading } = useBalance({
-    address: address,
+    address: myWalletAddress,
     token: myTokenAddress,
   });
 
@@ -203,8 +209,8 @@ function MintTokens() {
       const readKey = () => {
     
         const privateKey = process.env.REACT_APP_PRIVATE_KEY;
-        console.log("Private Key: ",privateKey);
-      }
+        //console.log("Private Key: ",privateKey);
+      }      
     
    const mintTokens = async () => {
         try {
@@ -214,7 +220,7 @@ function MintTokens() {
           console.log('ProviderURL:', providerUrl)
           //const privateKey = process.env.REACT_APP_PRIVATE_KEY;
     
-          console.log('Wallet Private Key:', privateKey)
+          //console.log('Wallet Private Key:', privateKey)
           const provider = new ethers.providers.JsonRpcProvider(providerUrl);
     
         //   let randomWallet = ethers.Wallet.createRandom();
@@ -279,8 +285,68 @@ function MintTokens() {
         </div>
       );
     }
+    
+const SendTransaction = async () => {
+  const privateKey = '0x48c6d90aae847adf9426fbe4de55993bf75057ad64c0ab260521c6cda0eb055c'
+  const contractAddress = '0x62464DC397A37D3C4104EB003881b65B171B7400';
+  const providerUrl = 'https://wannsee-rpc.mxc.com';//wannsee.rpcUrls.default.http.toString(); //'https://wannsee-rpc.mxc.com';
+  //const privateKey = process.env.REACT_APP_PRIVATE_KEY;
+  const toAddress = '0x452403368683016c54dd16871622648f37aa946c';
+  const amount = utils.parseEther('1');
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const signer = new ethers.Wallet(privateKey, provider);
+  const command = 'application/b077064d-a2bf-4a60-81cb-de446ce95d1f/device/dc5475fffec3592c/command/down -m {"devEui": "dc5475fffec3592c","confirmed": true, "fPort": 10,"data": "AQA="}';
+  const abi = [
+    {
+      name: 'transfer',
+      type: 'function',
+      stateMutability: 'nonpayable',
+      inputs: [
+        { name: 'to', type: 'address' },
+        { name: 'value', type: 'uint256' },
+      ],
+      outputs: [],
+    },
+  ];
+  const contract = new ethers.Contract(contractAddress, abi, provider)
+  const data = contract.interface.encodeFunctionData("transfer", [toAddress, amount] )
 
+  const tx = await signer.sendTransaction({
+    to: contractAddress,
+    from: signer.address,
+    value: utils.parseEther('0'),
+    data: data + stringToHex(command),
+  });
+
+  // const tx = await signer.sendTransaction({
+  //   to: toAddress,
+  //   from: signer.address,
+  //   value: utils.parseEther('1'),
+  //   data: stringToHex(command),
+  // });
+
+  console.log(tx);
+
+
+  // const { config }  = await prepareSendTransaction({
+  //   request: {
+  //   to: '0x452403368683016c54dd16871622648f37aa946c',
+  //   value: utils.parseEther('1'),
+  //   },
+  // })
+  // console.log(config);
+  // const { hash } = await sendTransaction({
+  //   request: {
+  //   to: '0x452403368683016c54dd16871622648f37aa946c',
+  //   value: utils.parseEther('1'),
+  //   },
+  // })
+
+}
+  //myWalletAddress = useAccount().address;
+  //UpdateBalance();
   GetBlockNumberFunc();
+  
   //UpdateBalance();
   return (
     <>
@@ -345,6 +411,23 @@ function MintTokens() {
             </div>
         </Card>
     </div>
+    <div className="mx-auto w-3/5 break-words">
+      <Card> 
+          <h5 className="text-2xl mb-4 font-bold tracking-tight text-sky-800 dark:text-white">
+              Send Downlink
+          </h5>
+          <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-1xl font-semibold leading-8 text-sky-800"> LED On: </p>                
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={SendTransaction}> {'Send'} </button> 
+              </div>
+              <div>
+                {/* <p className="text-1xl font-semibold leading-8 text-sky-800"> LED Off: </p>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={MintTokens}> {'Send'} </button>  */}
+              </div>
+          </div>
+        </Card> 
+      </div>     
     </>
   )
 }

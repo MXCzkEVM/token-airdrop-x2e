@@ -28,3 +28,15 @@ export function hexToBytes(hex: string): number[] {
     return null;
   }
   
+  export function stringToHex(inputString) {
+    const textEncoder = new TextEncoder();
+    const utf8Bytes = textEncoder.encode(inputString);
+    let hexString = '';
+  
+    for (let i = 0; i < utf8Bytes.length; i++) {
+      const byte = utf8Bytes[i];
+      hexString += byte.toString(16).padStart(2, '0');
+    }
+  
+    return hexString;
+  }
