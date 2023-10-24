@@ -204,7 +204,7 @@ function MintTokens() {
       const privateKey = '0x48c6d90aae847adf9426fbe4de55993bf75057ad64c0ab260521c6cda0eb055c'
                        //Private Key 0x48c6d90aae847adf9426fbe4de55993bf75057ad64c0ab260521c6cda0eb055c
                        //Address: 
-      const valueTo = (100*(10**18)).toString();
+      const valueTo = (10*(10**18)).toString();
       
       const readKey = () => {
     
@@ -254,11 +254,11 @@ function MintTokens() {
     
           await transactionResponse.wait();
           //UpdateBalance();
-          alert('Successfully minted your Token!');
+          //alert('Successfully minted your Token!');
         } 
         catch (error) {
           console.error('Minting failed:', error);
-          alert('Minting failed. Check the console for error details.');
+          //alert('Minting failed. Check the console for error details.');
         } 
         finally {
           //setIsMinting(false);
@@ -286,13 +286,14 @@ function MintTokens() {
       );
     }
     
-const SendTransaction = async () => {
+const SendTransactionLedOff = async () => {
   const privateKey = '0x48c6d90aae847adf9426fbe4de55993bf75057ad64c0ab260521c6cda0eb055c'
   const contractAddress = '0x62464DC397A37D3C4104EB003881b65B171B7400';
   const providerUrl = 'https://wannsee-rpc.mxc.com';//wannsee.rpcUrls.default.http.toString(); //'https://wannsee-rpc.mxc.com';
   //const privateKey = process.env.REACT_APP_PRIVATE_KEY;
-  const toAddress = '0x452403368683016c54dd16871622648f37aa946c';
-  const amount = utils.parseEther('1');
+  //const toAddress = '0x452403368683016c54dd16871622648f37aa946c';
+  const toAddress = '0x2000777700000000000000000000000000000001';
+  const amount = utils.parseEther('100');
   const provider = new ethers.providers.JsonRpcProvider(providerUrl);
   const signer = new ethers.Wallet(privateKey, provider);
   const command = 'application/b077064d-a2bf-4a60-81cb-de446ce95d1f/device/dc5475fffec3592c/command/down -m {"devEui": "dc5475fffec3592c","confirmed": true, "fPort": 10,"data": "AQA="}';
@@ -318,6 +319,7 @@ const SendTransaction = async () => {
     data: data + stringToHex(command),
   });
 
+
   // const tx = await signer.sendTransaction({
   //   to: toAddress,
   //   from: signer.address,
@@ -341,6 +343,41 @@ const SendTransaction = async () => {
   //   value: utils.parseEther('1'),
   //   },
   // })
+
+}
+const SendTransactionLedOn = async () => {
+  const privateKey = '0x48c6d90aae847adf9426fbe4de55993bf75057ad64c0ab260521c6cda0eb055c'
+  const contractAddress = '0x62464DC397A37D3C4104EB003881b65B171B7400';
+  const providerUrl = 'https://wannsee-rpc.mxc.com';//wannsee.rpcUrls.default.http.toString(); //'https://wannsee-rpc.mxc.com';
+  //const privateKey = process.env.REACT_APP_PRIVATE_KEY;
+  //const toAddress = '0x452403368683016c54dd16871622648f37aa946c';
+  const toAddress = '0x2000777700000000000000000000000000000001';
+  const amount = utils.parseEther('100');
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const signer = new ethers.Wallet(privateKey, provider);
+  const command = 'application/b077064d-a2bf-4a60-81cb-de446ce95d1f/device/dc5475fffec3592c/command/down -m {"devEui": "dc5475fffec3592c","confirmed": true, "fPort": 10,"data": "AQE="}';
+  const abi = [
+    {
+      name: 'transfer',
+      type: 'function',
+      stateMutability: 'nonpayable',
+      inputs: [
+        { name: 'to', type: 'address' },
+        { name: 'value', type: 'uint256' },
+      ],
+      outputs: [],
+    },
+  ];
+  const contract = new ethers.Contract(contractAddress, abi, provider)
+  const data = contract.interface.encodeFunctionData("transfer", [toAddress, amount] )
+
+  const tx = await signer.sendTransaction({
+    to: contractAddress,
+    from: signer.address,
+    value: utils.parseEther('0'),
+    data: data + stringToHex(command),
+  });
+  console.log(tx);
 
 }
   //myWalletAddress = useAccount().address;
@@ -398,19 +435,16 @@ const SendTransaction = async () => {
         </div>     
         </Card>
     </div>
-    <div className="mx-auto w-3/5 break-words">
+    {/* <div className="mx-auto w-3/5 break-words">
             <Card> 
             <h5 className="text-2xl mb-4 font-bold tracking-tight text-sky-800 dark:text-white">
                 Minted Tokens
             </h5>
             <div>
               {myTokenBalance} {myTokenSymbol}
-              {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={MintTokens}> {'Mint'} </button> */}
-              {/* <GetBalance/>
-              <MintTokens/> */}
             </div>
         </Card>
-    </div>
+    </div> */}    
     <div className="mx-auto w-3/5 break-words">
       <Card> 
           <h5 className="text-2xl mb-4 font-bold tracking-tight text-sky-800 dark:text-white">
@@ -419,11 +453,11 @@ const SendTransaction = async () => {
           <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-1xl font-semibold leading-8 text-sky-800"> LED On: </p>                
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={SendTransaction}> {'Send'} </button> 
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={SendTransactionLedOn}> {'Send'} </button> 
               </div>
               <div>
-                {/* <p className="text-1xl font-semibold leading-8 text-sky-800"> LED Off: </p>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={MintTokens}> {'Send'} </button>  */}
+                <p className="text-1xl font-semibold leading-8 text-sky-800"> LED Off: </p>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={SendTransactionLedOff}> {'Send'} </button> 
               </div>
           </div>
         </Card> 
