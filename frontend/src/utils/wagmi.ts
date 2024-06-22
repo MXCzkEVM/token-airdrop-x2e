@@ -7,22 +7,22 @@ import { Chain, InjectedConnector } from '@wagmi/core'
 import { connectorsForWallets, } from '@rainbow-me/rainbowkit'
 import { rainbowWallet, metaMaskWallet, walletConnectWallet, coinbaseWallet, injectedWallet } from '@rainbow-me/rainbowkit/wallets'
 
-export const wannsee = {
-    id: 5167003,
-    name: 'Wannsee',
-    network: 'Wannsee',
+export const geneva = {
+    id: 5167004,
+    name: 'Genea',
+    network: 'Geneva',
     nativeCurrency: {
         decimals: 18,
         name: 'MXC Token',
         symbol: 'MXC',
     },
     rpcUrls: {
-        public: { http: ['"https://wannsee-rpc.mxc.com"'] },
-        default: { http: ['"https://wannsee-rpc.mxc.com"'] },
+        public: { http: ['"https://geneva-rpc.moonchain.com"'] },
+        default: { http: ['"https://geneva-rpc.moonchain.com"'] },
     },
     blockExplorers: {
-        etherscan: { name: 'etherscan', url: 'https://wannsee-explorer.mxc.com' },
-        default: { name: 'etherscan', url: 'https://wannsee-explorer.mxc.com' },
+        etherscan: { name: 'etherscan', url: 'https://geneva-explorer.moonchain.com' },
+        default: { name: 'etherscan', url: 'https://geneva-explorer.moonchain.com' },
     },
 } as const satisfies Chain
 
@@ -47,12 +47,12 @@ export const wannsee = {
  
 const { chains, provider,
   webSocketProvider,publicClient } = configureChains(
-  [wannsee],
+  [geneva],
   [
     jsonRpcProvider({
       rpc: (chain) => ({
-        http: `https://wannsee-rpc.mxc.com`,
-        webSocket: `wss://wannsee-rpc.mxc.com`,
+        http: `https://geneva-rpc.moonchain.com`,
+        webSocket: `wss://geneva-rpc.moonchain.com/ws`,
       }),
     }),
   ],

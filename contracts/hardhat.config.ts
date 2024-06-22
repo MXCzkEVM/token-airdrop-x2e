@@ -1,6 +1,5 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import "@nomiclabs/hardhat-waffle";
 import "hardhat-docgen"
 
 const config: HardhatUserConfig = {
@@ -9,9 +8,9 @@ const config: HardhatUserConfig = {
     anvil: {
       url: "http://localhost:8545",
     },
-    wannsee: {
-            url: "https://wannsee-rpc.mxc.com",
-            chainId: 5167003,
+    geneva: {
+            url: "https://geneva-rpc.moonchain.com",
+            chainId: 5167004,
             //accounts: ["6ae4bf9ec354bb7770407fef831151d5857d731a8bb98ce0b1d215861337e8e4"],
             accounts: ["6ae4bf9ec354bb7770407fef831151d5857d731a8bb98ce0b1d215861337e8e4"] as HttpNetworkAccountsUserConfig | undefined,
             //gasPrice: 9000000000000,

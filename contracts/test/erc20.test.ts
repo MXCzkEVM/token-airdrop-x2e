@@ -1,12 +1,9 @@
-import { ERC20Impl__factory } from './../typechain-types/factories/contracts/ERC20Impl__factory';
-import { expect } from "chai";
-import { ethers, waffle } from "hardhat";
-import { ecsign } from "ethereumjs-util";
-import { BigNumber } from "ethers";
-import { solidityPack } from "ethers/lib/utils";
-import { any } from 'hardhat/internal/core/params/argumentTypes';
-const { provider } = waffle;
-import {Airdrop, ERC20Factory} from "../typechain-types"
+import { expect } from 'chai';
+import { ethers } from 'hardhat';
+import { BigNumber } from 'ethers';
+import { ERC20Impl__factory } from '../typechain-types/factories/ERC20Impl__factory';
+import { Airdrop, ERC20Factory } from '../typechain-types';
+
 
 const { keccak256, defaultAbiCoder, toUtf8Bytes, hexlify } = ethers.utils;
 const { MaxUint256 } = ethers.constants;
@@ -36,8 +33,8 @@ describe("ERC20 Impl through a Factory", () => {
     addr3: any;
 
   before(async () => {
-    [deployer, operator, holder, recipient, addr1, addr2, addr3] = await provider.getWallets();
-  });
+    [deployer, operator, holder, recipient, addr1, addr2, addr3] = await ethers.getSigners();
+    });
 
   beforeEach(async () => {
     // Deploy the ERC20 Factory
