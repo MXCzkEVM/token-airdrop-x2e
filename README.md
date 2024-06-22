@@ -41,6 +41,8 @@ Sample airdrop format:
    Most contracts implement the NatSpec documentation format, which docgen picks up.
 5. Deploy: `yarn hardhat run scripts/deploy.ts` (use the `--network` flag, although note that you don't need to deploy anything to use the app locally)
 
+**Important: It is crucial to provide the private key of the used wallet as an entry in the accounts section of hardhat.config.ts.**
+
 ### Contract Architecture
 
 There are three contracts: `ERC20Factory`, `ERC20Impl` and `Airdrop`
