@@ -3,7 +3,7 @@ export const DEFAULT_SUPPLY = `1000000000000000000000000`
 import { BigNumber, ethers } from 'ethers'
 
 export const txLink = (hash: string) =>
-  `<a target="_blank" href=\`\${https://wannsee-explorer.mxc.com/tx/\${hash}\`>txn</a>`
+  `<a target="_blank" href=\`\${https://explorer.moonchain.com/tx/\${hash}\`>txn</a>`
 
 export const sumBigNumbers = (numbers: BigNumber[]): BigNumber => {
   let sum = BigNumber.from(0)
