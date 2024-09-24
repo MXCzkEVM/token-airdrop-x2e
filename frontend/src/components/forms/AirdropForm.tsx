@@ -107,7 +107,7 @@ const AirdropForm = (): React.ReactElement<any, any> => {
             onClick={(e) => {
               console.log(`hello`)
               e.preventDefault()
-              airdropTokensWrite.()
+              airdropTokensWrite()
             }}
             type="submit"
           >
