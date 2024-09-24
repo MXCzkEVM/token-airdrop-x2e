@@ -106,7 +106,6 @@ const AirdropForm = (): React.ReactElement<any, any> => {
             disabled={isAirdropComplete || isAirdropResultLoading}
             onClick={(e) => {
               console.log(`hello`)
-              console.log('Type of airdropTokensWrite:', typeof airdropTokensWrite)
               e.preventDefault()
               airdropTokensWrite.()
             }}
