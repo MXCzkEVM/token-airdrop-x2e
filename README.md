@@ -9,7 +9,7 @@ cd frontend && yarn
 yarn dev
 # http://localhost:3000
 # this should allow you use deploy tokens and distribute tokens using wannsee
-# MXC Faucet: https://wannsee-bridge.mxc.com/
+# MXC Faucet: https://geneva-bridge.mxc.com/
 ```
 
 ### **Frontend Architecture**
