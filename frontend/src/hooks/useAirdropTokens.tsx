@@ -30,17 +30,11 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
   const [isFileUploaded, setFileUploaded] = useState<boolean>(false)
   const [file, setFile] = useState<any>(null)
   const [currentAllowance, setCurrentAllowance] = useState<BigNumber>(BN_ZERO)
-  // total required allowance for current airdrop
   const [totalRequiredAllowance, setTotalRequiredAllowance] =
     useState<BigNumber>(BN_ZERO)
-
   const [isApprovalComplete, setIsApprovalComplete] = useState<boolean>(false)
   const [isAirdropComplete, setIsAirdropComplete] = useState<boolean>(false)
-
-  const [calldata, setCallData] = useState<AirdropCalldata>([
-    [],
-    [],
-  ] as AirdropCalldata)
+  const [calldata, setCallData] = useState<AirdropCalldata>([[], []] as AirdropCalldata)
   const debounceCalldata = useDebounce(calldata, 500)
 
   const isApprovalRequired =
@@ -63,6 +57,7 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
     })
 
   console.log('prepareApprovalError', prepareApprovalError)
+  console.log('approvalConfig', approvalConfig)
 
   // ============== APPROVAL TXN WRITE ==============
   const {
@@ -73,6 +68,8 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
   } = useContractWrite(approvalConfig)
 
   console.log('approvalWriteError', approvalWriteError)
+  console.log('approvalData', approvalData)
+  console.log('approvalWrite', approvalWrite)
 
   // ============== APPROVAL TXN WAIT FOR MINE ==============
   const { isLoading: approvalLoading, isSuccess: approvalSuccess } =
@@ -83,8 +80,12 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
       onSuccess() {
         toast.success(`Approval Txn Success`)
         setIsApprovalComplete(true)
+        console.log('Approval transaction successful')
       },
     })
+
+  console.log('approvalLoading', approvalLoading)
+  console.log('approvalSuccess', approvalSuccess)
 
   // ============== AIRDROP TXN PREPARE ==============
   const {
@@ -96,11 +97,12 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
     abi: AIRDROP_ABI,
     functionName: `airdropTokens`,
     args: [token as `0x${string}`, debounceCalldata[0], debounceCalldata[1]],
-    enabled: Boolean(isApprovalComplete && file != null),
+    enabled: isApprovalComplete && file != null,
   })
 
   console.log('prepareAirdropError', prepareAirdropError)
   console.log('isPrepareAirdropError', isPrepareAirdropError)
+  console.log('airdropTokensConfig', airdropTokensConfig)
 
   // ============== AIRDROP TXN WRITE ==============
   const {
@@ -108,8 +110,12 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
     write: airdropTokensWrite,
     isError: isAirdropWriteError,
     error: airdropWriteError,
-  } = useContractWrite(airdropTokensConfig)
+  } = useContractWrite({
+    ...airdropTokensConfig,
+    enabled: isApprovalComplete && file != null,
+  })
 
+  console.log('airdropTokensWrite', airdropTokensWrite)
   console.log('isAirdropWriteError', isAirdropWriteError)
   console.log('airdropWriteError', airdropWriteError)
 
@@ -134,6 +140,8 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
   const provider = useProvider()
 
   useEffect(() => {
+    console.log('useAirdropTokens initialized with token:', token)
+    console.log('airdropTokensWrite:', airdropTokensWrite)
     // when the selected token changes, fetch allowance from owner -> airdrop contract address
     const getAllowance = async () => {
       if (token === null || token === '0x') return
@@ -155,42 +163,66 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
   const fileHandler = (event: any) => {
     event.preventDefault()
     const files = event.target.files
-    if (files) {
+    if (files && files[0]) {
+      const file = files[0]
+      const fileExtension = file.name.split('.').pop().toLowerCase()
+      
+      if (fileExtension !== 'csv') {
+        toast.error('Please upload a valid CSV file.')
+        return
+      }
+
       setFile(event.target.value)
       setFileUploaded(true)
-      Papa.parse(files[0], {
+      Papa.parse(file, {
         header: false,
         skipEmptyLines: true,
         complete: function ({ data }) {
-          // console.log(`Finished:`, data);
-          const recipients = data.map((i: any) => i[0])
-          const airdropAmounts = data.map((i: any) =>
-            BigNumber.from(i[1]).mul(BigNumber.from(10).pow(18)),
-          )
-          const generatedCalldata: any = [recipients, airdropAmounts]
+          try {
+            const recipients = data.map((i: any) => i[0])
+            const airdropAmounts = data.map((i: any) =>
+              BigNumber.from(i[1]).mul(BigNumber.from(10).pow(18)),
+            )
+            const generatedCalldata: any = [recipients, airdropAmounts]
 
-          setTotalRequiredAllowance(
-            sumBigNumbers(generatedCalldata[1]).add(BigNumber.from(1)),
-          )
-          // Parsed Data Response in array format
-          setParsedData(data)
-          // set calldata
-          setCallData(generatedCalldata)
+            setTotalRequiredAllowance(
+              sumBigNumbers(generatedCalldata[1]).add(BigNumber.from(1)),
+            )
+            // Parsed Data Response in array format
+            setParsedData(data)
+            // set calldata
+            setCallData(generatedCalldata)
+          } catch (error) {
+            console.error("Parsing error:", error)
+            toast.error(`Error processing CSV file: ${error.message}`)
+            // Reset or update state as needed
+            setParsedData([])
+            setCallData([[], []])
+          }
         },
         error: function (error) {
-          // Handle parsing error
-          console.error("Parsing error:", error);
-          toast.error(`Error parsing CSV file: ${error.message}`);
+          console.error("Parsing error:", error)
+          toast.error(`Error parsing CSV file: ${error.message}`)
           // Reset or update state as needed
-          setParsedData([]);
-          setCallData([[], []]);
+          setParsedData([])
+          setCallData([[], []])
         },
       })
+    } else {
+      toast.error('No file selected.')
     }
   }
+
   // set the selected token for airdrop
   const handleSelectToken = (e: any) => {
     console.log('Selected Token', e.target.value)
+  }
+
+  // Function to reset approval state
+  const resetApproval = () => {
+    setIsApprovalComplete(false)
+    setCurrentAllowance(BN_ZERO)
+    console.log('Approval state reset')
   }
 
   return {
@@ -203,9 +235,7 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
       totalRequiredAllowance,
       approvalLoading,
       isAirdropComplete,
-      airdropTokensWrite,
       airdropTokensData,
-      airdropStatus,
       isAirdropResultLoading,
       isAirdropSuccess,
       errors: [
@@ -214,7 +244,6 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
         isPrepareAirdropError,
         prepareAirdropError,
         isAirdropWriteError,
-        isAirdropWriteError,
         airdropWriteError,
       ],
     },
@@ -222,8 +251,12 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
       fileHandler,
       handleSelectToken,
       approvalWrite,
+      airdropTokensWrite,
+      resetApproval, // Expose the reset function
     },
   }
 }
 
 export default useAirdropTokens
+
+
