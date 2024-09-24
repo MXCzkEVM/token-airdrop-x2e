@@ -105,17 +105,22 @@ const AirdropForm = (): React.ReactElement<any, any> => {
           <Button
             disabled={isAirdropComplete || isAirdropResultLoading}
             onClick={(e) => {
-              console.log(`hello`)
               e.preventDefault()
-              airdropTokensWrite?.()
+              console.log('Attempting to airdrop tokens...')
+              if (airdropTokensWrite) {
+                airdropTokensWrite()
+              } else {
+                console.error('airdropTokensWrite is undefined')
+                // Optionally, provide feedback to the user
+              }
             }}
             type="submit"
           >
             {isAirdropResultLoading
-              ? `Airdropping...`
+              ? 'Airdropping...'
               : isAirdropSuccess || isAirdropComplete
-              ? `Airdropped ✅`
-              : `Airdrop`}
+              ? 'Airdropped ✅'
+              : 'Airdrop'}
           </Button>
         </div>
 
