@@ -177,6 +177,14 @@ const useAirdropTokens = ({ token }: IUseAirdropTokens) => {
           // set calldata
           setCallData(generatedCalldata)
         },
+        error: function (error) {
+          // Handle parsing error
+          console.error("Parsing error:", error);
+          toast.error(`Error parsing CSV file: ${error.message}`);
+          // Reset or update state as needed
+          setParsedData([]);
+          setCallData([[], []]);
+        },
       })
     }
   }
