@@ -105,9 +105,14 @@ const AirdropForm = (): React.ReactElement<any, any> => {
           <Button
             disabled={isAirdropComplete || isAirdropResultLoading}
             onClick={(e) => {
-              console.log(`hello`)
               e.preventDefault()
-              airdropTokensWrite?.()
+              console.log('Airdrop button clicked')
+              if (typeof airdropTokensWrite === 'function') {
+                console.log('Calling airdropTokensWrite')
+                airdropTokensWrite()
+              } else {
+                console.error('airdropTokensWrite is not a function:', airdropTokensWrite)
+              }
             }}
             type="submit"
           >
